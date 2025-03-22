@@ -1,0 +1,98 @@
+%!TEX encoding = UTF-8 Unicode
+%!TEX TS-program = xelatex
+%% This template licensed under CC-BY-NC-SA by Koenraad De Smedt
+\documentclass[a4paper,12pt]{article}
+%\usepackage[margin=24mm]{geometry}
+
+\usepackage{setspace}
+
+\usepackage[T1]{fontenc} % Codificacao da fonte
+\usepackage{times} % Definindo a fonte como Times New Roman
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\lhead{Centro Universitário da FEI}
+%\chead{Resenha - Capítulo 7 - Livro Texto}
+%\rhead{123105-9}
+
+\rfoot{\thepage} %número da página
+\cfoot{\textit{[PEL202] Fundamentos da Inteligência Artificial}}
+
+\usepackage[left=2cm,right=2cm,top=2cm,bottom=2cm]{geometry}
+
+%\usepackage[utf8]{inputenc}
+\usepackage[portuguese]{babel} 
+\usepackage[T1]{fontenc}
+
+\usepackage{fontspec,xltxtra,polyglossia,titling,graphicx}
+\usepackage{verbatim,gb4e,synttree,multicol} % choose or add what you need
+\usepackage[colorlinks,urlcolor=blue,citecolor=blue,linkcolor=blue]{hyperref}
+%\setmainfont[Mapping=tex-text]{Times New Roman} % or another similar font
+
+\setdefaultlanguage{english}
+\setotherlanguages{norsk}
+\usepackage{natbib}
+\bibliographystyle{plain}
+
+\begin{document}
+	\begin{Large}
+		Resenha crítica do Artigo "\textit{A Turing test of whether AI chatbots are behaviorally similar to humans}" \cite{gptTuringTest}
+	\end{Large} 
+	
+	\paragraph{}
+	
+	% Introducao Inicial
+	% Desde o lancamento do \textit{Chat-GPT} pela empresa OpenAI em novembro de 2023 o mercado de chatbots vem ganhando cada vez mais atencao. Em apenas 3 anos esse tipo de ferramenta vem se tornando cada vez mais presente no nosso cotidiano, sendo utilizados desde simples auxiliadores de pesquisa ate importantes tomadas de decisoes, com uma revolucao tao grande, muito se questiona quais serao os impactos causados por essas novas tecnologias. Tendo em vista isso o artigo "\textit{A Turing test of whether AI chatbots are behaviorally similar to humans}"\cite{gptTuringTest} apresenta uma analise comportamental sobre, em especifico, os chats gpt3 e gpt4 atravez da utilizacao de jogos econômicos clássicos e testes de personalidade no qual extraem alguns tracos como cooperação, altruísmo, confiança e aversão ao risco. Os chatbots tambem foram submetidos ao teste de \textit{Turing}. 
+	
+	% Introducao Corrigida
+	Desde o lançamento do \textit{ChatGPT} pela empresa OpenAI, em novembro de 2022, o mercado de chatbots vem ganhando cada vez mais atenção. Em apenas três anos, esse tipo de ferramenta tornou-se amplamente presente no cotidiano, sendo utilizado desde simples auxiliares de pesquisa até em importantes tomadas de decisão. Com uma revolução tão significativa, surgem questionamentos sobre os impactos que essas novas tecnologias podem causar.  
+	
+	Tendo isso em vista, o artigo "\textit{A Turing Test of Whether AI Chatbots Are Behaviorally Similar to Humans}" \cite{gptTuringTest} apresenta uma análise comportamental dos chatbots \textit{ChatGPT-3} e \textit{ChatGPT-4}, utilizando jogos econômicos e testes de personalidade para extrair traços como cooperação, altruísmo, confiança e aversão ao risco. Além disso, os chatbots foram submetidos ao teste de Turing para avaliar o quão similares seus comportamentos são aos de humanos.
+	
+	
+	% Resumo Inicial
+	%Mesmo o artigo tendo o titulo apenas mencionando o teste de \textit{Turing} a pesquisa esta mais focada em extrair caracteriscas de personalidades. Inicialmente o \textit{ChatGPT-3} e o \textit{ChatGPT-4} foram submetidos ao teste de personalidade \textit{Big Five}, no qual o \textit{ChatGPT-4} teve desempenho relativamente proximo a media dos humanos e o \textit{ChatGPT-3} apresentou uma grande divergencia, principalmente quanto a Abertura à Experiência.
+	
+	%Na sequencia os dois chatbots sao submetidos a jogos de personalidades no qual novamente o \textit{ChatGPT-4} teve desempenho relativamente proximo a de comportamentos humanos exceto no jogo "\textit{Dilema do Prisioneiro}", onde diferente dos humanos a IA tente a cooperar ao inves de instintivamente se proteger, enquanto o \textit{ChatGPT-3} se comportou diferente dos humanos em 6 dos 8 jogos.
+	
+	
+	% Resumo Corrigido
+	Mesmo que o título do artigo mencione apenas o teste de Turing, a pesquisa está focada em analisar características de personalidade dos chatbots. Inicialmente, o \textit{ChatGPT-3} e o \textit{ChatGPT-4} foram submetidos ao teste de personalidade \textit{Big Five}, no qual o \textit{ChatGPT-4} apresentou um desempenho relativamente próximo à média dos humanos, enquanto o \textit{ChatGPT-3} mostrou uma grande divergência, especialmente no fator Abertura à Experiência.
+	
+	Em seguida, os dois chatbots foram avaliados em jogos comportamentais. Novamente, o \textit{ChatGPT-4} demonstrou um desempenho semelhante ao de seres humanos, com exceção do jogo \textit{Dilema do Prisioneiro}, no qual, diferentemente dos humanos, a IA tende a cooperar em vez de se proteger instintivamente. Já o \textit{ChatGPT-3} se comportou de maneira distinta dos humanos em seis dos oito jogos analisados.
+	
+	% Analise Critica Inicial
+	% Esse tipo de analise comportamental e extremamente importante visto em conta que geralmente o \textit{dataset} utilizado para treino dos pesos não sao divulgados, sendo assim não é possivel saber se o produto final possui algum tipo de vies, e se irão possuir algum risco social quando utilizado em larga escala.
+	% O artigo apresenta apenas 2 modelos de uma mesma empresa, um ponto que pode ser utilizado para trabalhos futuros é a analise de mais modelos de diferentes empresas, pois podemos comparar cada modelo como sendo uma pessoa, sendo assim não tendo uma macro analise do comportamento medio dos chatbots.
+	% Mesmo antes da criação do teste de \textit{Turing} ha um grande esforco dos cientitas em buscar uma forma de inteligencia universal, que seja perfeita, e muitas vezes essas inteligencias são constantemente embasadas e comparadas com a forma de inteligencia humana, e isso indica de forma indireta que estamos sempre comparamos a perfeicao com os seres humanos, e isso não é uma realidade pois apenas olhando para a humanidade conseguimos ver inumeros defeitos, tais como gerras, destruição, ganancias 
+	
+	% Analise Critica Corrigida
+	A análise comportamental de modelos de inteligência artificial é extremamente importante, especialmente porque os datasets utilizados para o treinamento dos modelos nem sempre são divulgados. Isso impede uma avaliação transparente sobre possíveis vieses nos modelos e dificulta a identificação de riscos sociais associados ao seu uso em larga escala.
+	
+	O artigo apresenta apenas dois modelos da mesma empresa, a OpenAI. Para estudos futuros, seria interessante expandir a análise para incluir chatbots de diferentes empresas, permitindo uma comparação mais ampla. Cada modelo pode ser visto como um indivíduo, e a análise de apenas dois modelos não oferece uma visão abrangente sobre o comportamento médio dos chatbots.
+	
+	Mesmo antes da criação do teste de Turing, há um grande esforço por parte dos cientistas para desenvolver uma forma de inteligência universal e perfeita. No entanto, essas inteligências são frequentemente baseadas e comparadas à inteligência humana, o que sugere, indiretamente, que a perfeição estaria associada aos seres humanos, porém isso não corresponde à realidade, pois a própria humanidade apresenta inúmeros defeitos, como guerras, destruição e ganância.
+	
+	% Conclusão Inicial 
+	% O artigo fornece um ponto de vista menos convencional e menos discutido no cotidiano, esse artigo é uma ótima leitura para todas as pessoas, principalmente as que utilizam com constância essa ferramenta, assim podendo tomar mais cuidado na sua utilização dependendo da aplicação. Por fim podemos dizer que no atual estado da arte o teste de \textit{Turing} está vencido, já possuímos recursos suficientes tornar uma maquina indistinguível de um humano.
+	
+	% Conclusão Corrigida
+	O artigo apresenta uma abordagem menos convencional e pouco discutida no cotidiano, tornando-se uma leitura valiosa, especialmente para aqueles que utilizam essa ferramenta com frequência. A compreensão de seu funcionamento e limitações pode auxiliar no uso mais consciente e responsável da tecnologia, dependendo da aplicação. 
+	
+	Por fim, pode-se argumentar que, no estado atual da arte, o Teste de Turing já foi superado, uma vez que dispomos de recursos suficientes para tornar uma máquina indistinguível de um ser humano em determinados contextos.
+	
+	
+	
+	\begin{center}
+		\centering{\textbf{Thiago Travagini Moura | 9125119-9 \\  Aluno Graduacao G+ - IAAAR.}}
+	\end{center}
+	
+	
+	%%\section*{Referências Bibliográficas}
+	\begingroup
+	\renewcommand{\section}[2]{}%
+	%\renewcommand{\chapter}[2]{}% for other classes
+	\bibliography{referencias}
+	\endgroup
+	
+\end{document}
