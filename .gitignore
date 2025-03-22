@@ -1,0 +1,45 @@
+# Arquivos auxiliares gerados pelo LaTeX
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.log
+*.lof
+*.lot
+*.nav
+*.out
+*.snm
+*.toc
+*.run.xml
+*.fdb_latexmk
+*.fls
+
+# Arquivos temporários do TeXstudio
+*.synctex.gz
+*.synctex(busy)
+*.synctex
+*.pdfsync
+*.dvi
+
+# Arquivos do BibTeX
+*.bbl
+*.blg
+
+# Arquivos de cache e backup do TeXstudio
+*.bak
+*.backup
+*.tmp
+*.sav
+*~
+
+# Arquivos compilados que podem ser regenerados
+**/latex/**/*.pdf
+*.ps
+
+# Pastas temporárias (caso existam)
+_build/
+latex.out/
+
+# Arquivos do editor (TeXstudio e outros editores)
+*.vrb
+*.xdv
