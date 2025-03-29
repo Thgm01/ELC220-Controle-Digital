@@ -1,6 +1,6 @@
 % 1.e)
 
-clear, clc
+clear, close all
 
 % Definindo as FTs Usadas no sistema
 G   = tf(2, [1 0.5]);

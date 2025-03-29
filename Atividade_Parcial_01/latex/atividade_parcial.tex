@@ -22,6 +22,9 @@
 \usepackage{float}
 \usepackage{amsmath}
 \usepackage{gensymb}
+\usepackage{tikz}
+\usepackage{hyperref}
+\usetikzlibrary{positioning, arrows, calc}
 
 \begin{document}
 	\begin{center}
@@ -31,15 +34,13 @@
 	\end{center}
 
 	\begin{center}
-		\centering{\textbf{Gustavo Rosell Collado (11.121.526-5)}}\\
+		\centering{\textbf{xxxxxxxx(xx.xxx.xxx-x)}}\\
 		\centering{\textbf{Massiel Blandy Ramón (11.122.397-0)}}\\
 		\centering{\textbf{Thiago Travagini Moura (11.121.329-4)}}
-		
-		
-		
 	\end{center}
 	
-	\paragraph{}
+	Para ter acesso aos códigos utilizados nessa atividade \href{https://github.com/Thgm01/ELC220-Controle-Digital/tree/main/Atividade_Parcial_01}{Clique Aqui} 
+		
 	
 	\section{Problema 1}
 	Uma câmara térmica usada para testes de stress térmico em grandes equipamentos é mostrada na figura 1 com seu respectivo diagrama de blocos simplificado. Considere a unidade de tempo em minuto. A câmara é aquecida por uma linha de vapor que é controlada por uma válvula eletricamente ativa. A abertura da porta afeta a temperatura da câmara e pode ser considerada como um distúrbio. No diagrama de blocos d(t) é um distúrbio causado pela abertura da porta, e(t) é o sinal de entrada do sistema e c(t) a temperatura de saída na câmara térmica.
@@ -48,6 +49,7 @@
 	\begin{figure}[H]
 		\centering
 		\includegraphics[width=0.9\linewidth]{images/planta_problema1}
+		\caption{Câmara térmica para realização de testes de stress em grandes equipamentos e diagrama de blocos simplificado}
 		\label{fig:plantaproblema1}
 	\end{figure}
 
@@ -80,6 +82,7 @@
 		\begin{figure}[H]
 			\centering
 			\includegraphics[width=0.5\linewidth]{images/respb.png}
+			\caption{Resposta do sistema para um degrau de amplitude 5}
 			\label{fig:resposta_b}
 		\end{figure}
 	
@@ -97,6 +100,7 @@
 		\begin{figure}[H]
 			\centering
 			\includegraphics[width=0.5\linewidth]{images/respc.png}
+			\caption{Resposta do sistema para um degrau de amplitude 5 e $25 \celsius$ como condição inicial}
 			\label{fig:resposta_c}
 		\end{figure}
 	
@@ -115,6 +119,8 @@
 		\begin{figure}[H]
 			\centering
 			\includegraphics[width=0.5\linewidth]{images/respd.png}
+			\caption{Resposta do sistema adicionando um distúrbio}
+						
 			\label{fig:resposta_d}
 		\end{figure}
 	
@@ -132,16 +138,17 @@
 		\begin{figure}[H]
 			\centering
 			\includegraphics[width=0.5\linewidth]{images/respe.png}
+			\caption{Resposta do sistema adicionando um distúrbio temporário}
 			\label{fig:resposta_e}
 		\end{figure}
 	
 	\section{Problema 2}
-		% TODO: Colocar a citação da figura e todos os captions das figuras
-		A figura 2 mostra o sistema de controle de temperatura da câmara térmica do problema 1.
+		A figura \ref{fig:plantaproblema2} mostra o sistema de controle de temperatura da câmara térmica do problema 1.
 		
 		\begin{figure}[H]
 			\centering
-			\includegraphics[width=0.9\linewidth]{images/planta_problema2}
+			\includegraphics[width=0.9\linewidth]{images/planta_problema2.png}
+			\caption{Sistema de controle de temperatura de uma câmara térmica}
 			\label{fig:plantaproblema2}
 		\end{figure}
 	
@@ -161,8 +168,38 @@
 				\label{eq:hz06}
 			\end{equation}
 			
-			% TODO: rever o nome diagrama de blocos e incluir aqui
 			Portanto tem-se um sistema representado pelo seguinte diagrama de blocos.
+
+\begin{figure}[h]
+    \centering
+    \begin{tikzpicture}[
+        block/.style={draw, rectangle, minimum width=1.5cm, minimum height=1cm, align=center},
+        sum/.style={draw, circle, node distance=1cm, inner sep=1pt, minimum size=0.5cm},
+        node distance=2cm, >=latex]
+        
+        % Nós do diagrama
+        \node (sum) [sum] {};  % Subtrator
+        \node (Gc) [block, right=of sum] {\small$G_c(z)$};
+        \node (H) [block, right=of Gc] {\small $\frac{1,037}{z - 0,741}$};
+        
+        % Nós de entrada e saída
+        \node (r) [left=of sum] {\small$R(z)$};
+        \node (c) [right=of H] {\small$C(z)$};
+        \node (sensor) [block, below=1.2cm of sum, xshift=4.5cm] {\small $0,04$};
+        
+        % Conexões
+        \draw[->] (r) -- node[pos=0.9, above] {\small$+$} (sum.west);
+        \draw[->] (sensor) -| node[pos=0.85, above, xshift=2.5mm] {\small$-$} (sum.south);
+        
+        \draw[->] (sum) -- (Gc);
+        \draw[->] (Gc) -- (H);
+        \draw[->] (H) -- (c);
+        \draw[->] (H) -- ++(1.5, 0) |- (sensor.east);
+    \end{tikzpicture}
+    \caption{Diagrama de blocos da câmara térmica sem distúrbio}
+\end{figure}
+
+
 			
 			
 			E a função de transferência de malha fechada será igual:
@@ -183,8 +220,8 @@
 			\begin{equation}
 				\left.
 				\begin{array}{c}
-					\displaystyle C_d(z) = G_d(z) \cdot D(z) = Z\left[\frac{2,5}{s+0,5} \cdot \frac{1}{s} \right] = 5 \cdot Z\left[\frac{1}{s(s+0,5)} \right] \\[20pt]
-					\displaystyle C_d(z) = 5 \cdot \frac{(1 - e^{-0,5T})z}{(z-1)(z-e^{-0,5T})} = \frac{01,296z}{(z-1)(z-0,741)}
+					\displaystyle C_d(z) = G_d(z) \cdot D(z) = Z\left[\frac{2,5}{s+0,5} \cdot \frac{1}{s} \right] = 5 \cdot Z\left[\frac{0,5}{s(s+0,5)} \right] \\[20pt]
+					\displaystyle C_d(z) = 5 \cdot \frac{(1 - e^{-0,5T})z}{(z-1)(z-e^{-0,5T})} = \frac{1,296z}{(z-1)(z-0,741)}
 				\end{array}
 				\right.
 				\quad 
@@ -251,7 +288,14 @@
 				\quad 
 			\end{equation}
 			
-			Nessa situação temos um sistema estável porém com erro de aproximadamente 86,2\%
+			Nessa situação temos um sistema estável porém com erro de aproximadamente 86,2\%. Utilizando o MATLAB se obtém o gráfico como mostra a figura \ref{fig:resp_2_4}.
+			
+			\begin{figure}[H]
+				\centering
+				\includegraphics[width=0.6\linewidth]{images/resp2d.png}
+				\caption{Resposta do sistema com $T+0,6$, $G_c(z)=1,0$ e $r(kT) = 0,4 h(kT)$}
+				\label{fig:resp_2_4}
+			\end{figure}
 			
 			
 		\subsection{Erro cenário 1}
@@ -268,10 +312,10 @@
 			\end{equation}
 			
 		\subsection{Sistema com ganho infinito}
-			Observando a equação \ref{eq:ftma} fica visível que os polos do sistema tem relação direta com o controlador, para um valor de K muito alto o polo do sistema estará fora do circulo de raio unitário do plano z, portanto esse sistema sera instável.
+			Observando a equação \ref{eq:ftma} fica visível que os polos do sistema tem relação direta com o controlador, para um valor de K muito alto o polo do sistema estará fora do circulo de raio unitário do plano z, portanto esse sistema sera instável para uma entrada de degrau unitário.
 			
 		\subsection{Alterando o período de amostragem}
-			Supondo um periodo de amostragem de $T = 6$ mim eh necessario refazer alguns calculos sendo inicialmente o calculo de $H(z)$ realizado na equacao \ref{eq:hz06}.
+			Supondo um período de amostragem de $T=6$ mim é necessário refazer alguns cálculos sendo inicialmente o calculo de $H(z)$ realizado na equação \ref{eq:hz06}.
 			
 			\begin{equation}
 			\left.
@@ -316,28 +360,132 @@
 		\begin{figure}[H]
 			\centering
 			\includegraphics[width=0.5\linewidth]{images/resp2g.png}
-			\label{fig:resposta_e}
+			\label{fig:resposta_g}
 		\end{figure}
 		
-				
+\section{Problema 3}
+A figura 3 mostra o sistema de controle de posição de uma junta de um braço robótico.
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.9\linewidth]{images/planta_problema3}
+	\caption{Sistema de controle de posição de uma junta de braço robótico}
+	\label{fig:plantaproblema3}
+\end{figure}
 
-			
-			
-			
-			
-			
-			
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
+\subsection{Função de transferência de malha fechada}
+Admitindo $T = 0,1$ s, $Gc(z) = 1,0$ e $K=2,4$ é necessário inicialmente realizar a conversão do controlador junto com os conversores para o domínio s, para isso é utilizado o segurador de ordem zero.
+	\begin{equation}
+		\left.
+		\begin{array}{c}
+			\displaystyle G_{SO}(s) = \frac{\displaystyle \frac{2}{T}}{s+\displaystyle\frac{2}{T}} = \frac{\displaystyle \frac{2}{0,1}}{s+\displaystyle\frac{2}{0,1}} = \frac{20}{s+20}
+		\end{array}
+		\right.
+		\quad 
+	\end{equation}
 	
+	Sendo assim o diagrama de blocos fica como mostra a figura \ref{img:gso}.
 	
+	\begin{figure}[H]
+	    \centering
+	    \begin{tikzpicture}[
+	        block/.style={draw, rectangle, minimum width=1cm, minimum height=1cm, align=center},
+	        sum/.style={draw, circle, node distance=1cm, inner sep=1pt, minimum size=0.5cm},
+	        node distance=1cm, >=latex]
+	        
+	        % Nós do diagrama
+	        \node (sum) [sum] {};  % Subtrator
+	        \node (Gso) [block, right=of sum] {\small$\frac{20}{s+20}$};
+	        \node (k) [block, right=of Gso] {\small$2,4$};   
+	        \node (Gs) [block, right=of k] {\small $\frac{200}{s(0,5s+1)}$};
+	        \node (red) [block, right=of Gs] {\small $\frac{1}{100}$};
+	        	        
+	        
+	        % Nós de entrada e saída
+	        \node (angleIn) [left=of sum] {\small$\theta_c$};
+	        \node (angleOut) [right=of red] {\small$\theta_c$};
+	        \node (sensor) [block, below=1.2cm of sum, xshift=4.5cm] {\small $0,07$};
+	        
+	        % Conexões
+	        \draw[->] (angleIn) -- node[pos=0.9, above] {\small$+$} (sum.west);
+	        \draw[->] (sensor) -| node[pos=0.85, above, xshift=2.5mm] {\small$-$} (sum.south);
+	        
+	        \draw[->] (sum) -- (Gso);
+	        \draw[->] (Gso) -- (k);
+	        \draw[->] (k) -- (Gs);
+	        \draw[->] (Gs) -- (red);
+	        	        
+	      
+	        \draw[->] (red) -- (angleOut);
+	        \draw[->] (red) -- ++(1, 0) |- (sensor.east);
+	    \end{tikzpicture}
+	    \caption{Diagrama de blocos de uma junta de braço robótico}
+	    \label{img:gso}
+	\end{figure}
+	
+	Dessa forma a função de transferência de malha aberta será:
+	\begin{equation}
+		\left.
+		\begin{array}{c}
+			\displaystyle G_{c}(s) = \frac{20 \cdot 24 \cdot 200}{(s+20) \cdot (0,5s^2+s)\cdot 100} = \frac{96}{0,5s^3 + 11s^2 + 20s}
+		\end{array}
+		\right.
+		\quad 
+	\end{equation}
+	
+	E a função de malha fechada será:
+	
+	\begin{equation}
+		\left.
+		\begin{array}{c}
+			\displaystyle G(s) = \frac{\displaystyle \frac{96}{0,5s^3 + 11s^2 + 20s}}{1 + \displaystyle \frac{96}{0,5s^3 + 11s^2 + 20s} \cdot 0,07} = \frac{192}{s^3 + 22s^2 +40s + 13,44} \rightarrow \\[30pt]
+			
+			 \rightarrow  \displaystyle G(s) = \frac{0,53}{s+20,04} + \frac{9,07}{s+0,44} - \frac{9,60}{s+1,52}
+		\end{array}
+		\right.
+		\quad 
+	\end{equation}
+	
+	A partir dessa equação e utilizando o software MATLAB resultou na seguinte função de transferência.
+	
+	\begin{equation}
+		\left.
+		\begin{array}{c}
+			\displaystyle G(z) = \frac{0,011(z+1)^3}{(z-0,957)(z-0,8586)z}
+		\end{array}
+		\right.
+		\quad 
+	\end{equation}
+	
+	Outra maneira de se obter a função de transferência de malha fechada é utilizando o H(z) assim como mostrado no Problema 2.
+	
+	\subsection{Faixa de tensão no sensor}
+		Admitindo que o angulo de saída deve ficar entre $\pm135$ é possível obter a faixa de tensão na saída do sensor como mostra a equação abaixo.
+		
+		\begin{equation}
+			\left.
+			\begin{array}{c}
+				\displaystyle \Delta V = (135 - (-135)) * 0,07 \rightarrow \Delta V = 18,9V
+			\end{array}
+			\right.
+			\quad 
+		\end{equation}
+		
+		Dependendo de qual a escolha da referência o intervalo de valores pode mudar, para esse exercício foi admitido que $0^\circ = 0V$ então o intervalo de valores será $\pm 9,45$.
+		
+	\subsection{Faixa de tensão do conversor A/D}
+		Analisando a figura \ref{fig:plantaproblema3} é possível observar que a entrada do conversor A/D é também o erro do sistema, para encontrar qual a faixa de tensão desse erro pode-se analisar os dois extremos, quando a referência está em $135^\circ$ e a saída esta em $-135^\circ$  e vice-versa.
+		
+		
+		\begin{equation}
+			\left.
+			\begin{array}{c}
+				\displaystyle 135*0,07 - (-135*0,07) = 18,9V \\[10pt]
+				\displaystyle -135*0,07 - 135*0,07 = -18,9V 
+			\end{array}
+			\right.
+			\quad 
+		\end{equation}
+		
+		Portanto a faixa de tensão do conversor A/D será de $\pm18,9V$.
+		
 \end{document}
