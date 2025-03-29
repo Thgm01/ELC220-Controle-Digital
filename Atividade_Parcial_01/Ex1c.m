@@ -25,7 +25,7 @@ valor_final = y_t(end);
 figure;
 hold on;
 
-    plot(t, y_t, 'g', 'LineWidth', 2, 'DisplayName', 'Saida');
+    plot(t, y_t, 'g', 'LineWidth', 2, 'DisplayName', 'Saída');
     y_line = yline(valor_final, '--','LineWidth', 1, 'Color', [0.7 0.7 0.7]);
     set(y_line, 'HandleVisibility', 'off');  
 

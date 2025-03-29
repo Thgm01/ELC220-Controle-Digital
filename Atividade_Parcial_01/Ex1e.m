@@ -42,7 +42,7 @@ hold on;
     grid on;
     xlabel('Tempo [min]');
     ylabel('Temperatura [°C]');
-    title('Resposta ao degrau com condição inicial e distúrbio');
+    title('Resposta ao degrau com condição inicial e distúrbio finito');
     xlim([0 22]);
     ylim([-10 60]); 
 

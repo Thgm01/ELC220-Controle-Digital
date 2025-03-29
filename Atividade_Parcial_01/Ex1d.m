@@ -28,8 +28,8 @@ figure;
 hold on;
 
     plot(t, y_t_G, 'b', 'LineWidth', 1.2, 'DisplayName', 'Planta');
-    plot(t, y_t_Gd, 'r', 'LineWidth', 1.2, 'DisplayName', 'Disturbio');
-    plot(t, y_t, 'g', 'LineWidth', 2, 'DisplayName', 'Saida');
+    plot(t, y_t_Gd, 'r', 'LineWidth', 1.2, 'DisplayName', 'Distúrbio');
+    plot(t, y_t, 'g', 'LineWidth', 2, 'DisplayName', 'Saída');
     y_line = yline(valor_final, '--','LineWidth', 1, 'Color', [0.7 0.7 0.7]);
     set(y_line, 'HandleVisibility', 'off');  
 
@@ -38,8 +38,11 @@ hold on;
     grid on;
     xlabel('Tempo [min]');
     ylabel('Temperatura [°C]');
-    title('Resposta ao degrau com condição inicial e disturbio');
+    title('Resposta ao degrau com condição inicial e distúrbio');
     xlim([0 10]);
     ylim([-10 60]); 
 
 hold off;
+
+
+
