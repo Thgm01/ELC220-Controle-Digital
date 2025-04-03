@@ -154,9 +154,43 @@
 	
 		\subsection{Função de transferência no domínio z}	
 			Para obter a função de transferência no domínio z, é necessário inicialmente realizar algumas modificações nas disposições no diagrama de bloco, para viabilizar a construção das funções de transferências, assim como mostra a figura \ref{}.
-			%TODO: Criar diagrama de blocos modificiado
-			
-			
+
+
+\begin{figure}[h]
+    \centering
+    \begin{tikzpicture}[
+        block/.style={draw, rectangle, minimum width=1.5cm, minimum height=1cm, align=center},
+        sum/.style={draw, circle, node distance=1cm, inner sep=1pt, minimum size=0.5cm},
+        node distance=2cm, >=latex]
+        
+        % Nós do diagrama
+        \node (sum) [sum, xshift=0.2cm] {};  % Subtrator
+        \node (Gc) [block, right=of sum] {\small$G_c(z)$};
+        \node (H) [block, right=of Gc] {\small$H(z)$};
+        \node (Gd) [block, above=of sum, xshift=-1.5cm] {\small$\frac{G_d(z)}{G_c(z) \cdot H(z)}$}; % Bloco deslocado para a esquerda
+        
+        % Nós de entrada e saída
+        \node (r) [left=of sum] {\small$R(z)$};
+        \node (c) [right=of H] {\small$C(z)$};
+        \node (d) [left=of Gd] {\small$D(z)$};
+        
+        % Conexões
+        \draw[->] (r) -- node[pos=0.9, above] {\small$+$} (sum.west);
+        \draw[->] (sum) -- (Gc);
+        \draw[->] (Gc) -- (H);
+        \draw[->] (H) -- (c);
+        \draw[->] (d) -- (Gd);
+        
+        % Realimentação
+        \node (fb) [coordinate, below=of Gc] {};
+        \draw[->] (H) -- ++(1.7, 0) |- (fb) -| node[pos=0.85, above, xshift=2.5mm] {\small$-$} (sum);
+        
+		\draw[->] (Gd.east) -| node[pos=0.95, above, , xshift=0.2cm] {\small$-$} (sum.north);
+
+    \end{tikzpicture}
+    \caption{Diagrama de blocos da câmara térmica}
+    \label{fig:diagrama_palnta2_final}
+\end{figure}
 			Agora com o sistema modificado é necessário converter a planta e os conversores para o domínio z. Com $T=0,6$ min temos:
 					
 		
@@ -176,34 +210,34 @@
 			Portanto tem-se um sistema representado pelo seguinte diagrama de blocos.
 
 
-\begin{figure}[h]
-    \centering
-    \begin{tikzpicture}[
-        block/.style={draw, rectangle, minimum width=1.5cm, minimum height=1cm, align=center},
-        sum/.style={draw, circle, node distance=1cm, inner sep=1pt, minimum size=0.5cm},
-        node distance=2cm, >=latex]
-        
-        % Nós do diagrama
-        \node (sum) [sum] {};  % Subtrator
-        \node (Gc) [block, right=of sum] {\small$G_c(z)$};
-        \node (H) [block, right=of Gc] {\small $\frac{0,041}{z - 0,741}$};
-        
-        % Nós de entrada e saída
-        \node (r) [left=of sum] {\small$R(z)$};
-        \node (c) [right=of H] {\small$C(z)$};
-        
-        % Conexões
-        \draw[->] (r) -- node[pos=0.9, above] {\small$+$} (sum.west);
-
-        \draw[->] (sum) -- (Gc);
-        \draw[->] (Gc) -- (H);
-        \draw[->] (H) -- (c);
-        
-        \node (fb) [coordinate, below=of Gc] {};
-		\draw[->] (H) -- ++(1.7, 0) |- (fb) -| node[pos=0.85, above, xshift=2.5mm] {\small$-$} (sum) ;
-    \end{tikzpicture}
-    \caption{Diagrama de blocos da câmara térmica sem distúrbio}
-\end{figure}
+		\begin{figure}[h]
+		    \centering
+		    \begin{tikzpicture}[
+		        block/.style={draw, rectangle, minimum width=1.5cm, minimum height=1cm, align=center},
+		        sum/.style={draw, circle, node distance=1cm, inner sep=1pt, minimum size=0.5cm},
+		        node distance=2cm, >=latex]
+		        
+		        % Nós do diagrama
+		        \node (sum) [sum] {};  % Subtrator
+		        \node (Gc) [block, right=of sum] {\small$G_c(z)$};
+		        \node (H) [block, right=of Gc] {\small $\frac{0,041}{z - 0,741}$};
+		        
+		        % Nós de entrada e saída
+		        \node (r) [left=of sum] {\small$R(z)$};
+		        \node (c) [right=of H] {\small$C(z)$};
+		        
+		        % Conexões
+		        \draw[->] (r) -- node[pos=0.9, above] {\small$+$} (sum.west);
+		
+		        \draw[->] (sum) -- (Gc);
+		        \draw[->] (Gc) -- (H);
+		        \draw[->] (H) -- (c);
+		        
+		        \node (fb) [coordinate, below=of Gc] {};
+				\draw[->] (H) -- ++(1.7, 0) |- (fb) -| node[pos=0.85, above, xshift=2.5mm] {\small$-$} (sum) ;
+		    \end{tikzpicture}
+		    \caption{Diagrama de blocos da câmara térmica sem distúrbio}
+		\end{figure}
 			
 			E a função de transferência de malha fechada será igual:
 			
@@ -218,31 +252,82 @@
 			\end{equation}
 		
 		\subsection{Distúrbio no domínio z}
-			Para
-		
-			Admitindo a entrada $r(kT)=0$ o sistema em malha aberta é possível extrair a temperatura $c(t)$ quando há um distúrbio com uma entrada de degrau unitário. 
+			Visualizando a figura \ref{fig:diagrama_palnta2_final} e admitindo a entrada $r(kT)=0$, é possível extrair a temperatura $c(t)$ quando há um distúrbio com uma entrada de degrau unitário tem-se o seguinte diagrama de blocos.
+			
+			\begin{figure}[h]
+			    \centering
+			    \begin{tikzpicture}[
+			        block/.style={draw, rectangle, minimum width=1.5cm, minimum height=1cm, align=center},
+			        sum/.style={draw, circle, node distance=1cm, inner sep=1pt, minimum size=0.5cm},
+			        node distance=2cm, >=latex]
+			        
+			        % Nós do diagrama
+			        \node (sum) [sum, xshift=0.2cm] {};  % Subtrator
+			        \node (Gc) [block, right=of sum] {\small$G_c(z)$};
+			        \node (H) [block, right=of Gc] {\small$H(z)$};
+			        \node (Gd) [block, left=of sum] {\small$\frac{G_d(z)}{G_c(z) \cdot H(z)}$}; % Bloco deslocado para a esquerda
+			        
+			        % Nós de entrada e saída
+			        \node (c) [right=of H] {\small$C(z)$};
+			        \node (d) [left=of Gd] {\small$D(z)$};
+			        
+			        % Conexões
+			        \draw[->] (sum) -- (Gc);
+			        \draw[->] (Gc) -- (H);
+			        \draw[->] (H) -- (c);
+			        \draw[->] (d) -- (Gd);
+			        
+			        % Realimentação
+			        \node (fb) [coordinate, below=of Gc] {};
+			        \draw[->] (H) -- ++(1.7, 0) |- (fb) -| node[pos=0.85, above, xshift=2.5mm] {\small$-$} (sum);
+			        
+					\draw[->] (Gd) -- node[pos=0.85, above, , xshift=0.2cm] {\small$-$} (sum);
+			
+			    \end{tikzpicture}
+			    \caption{Diagrama de blocos do distúrbio}
+			\end{figure}
+			
 			
 			\begin{equation}
 				\left.
 				\begin{array}{c}
-					\displaystyle G_d(z) = Z\left[\frac{2,5}{s+0,5} \cdot 0,04\right] \cdot \frac{1}{H(z)}  \\[20pt]
+					\displaystyle C_d(z) = -\frac{G_d(z)}{G_c(z) \cdot H(z)} \cdot \frac{G_c(z) \cdot H(z)}{1 + G_c(z) \cdot H(z)} = \frac{G_d(z)}{1 + G_c(z) \cdot H(z)} \cdot D(z) \\[20pt]
 					
-					\displaystyle Z\left[\frac{2,5}{s+0,5} \cdot 0,04\right] = 2,5 \cdot 0,04 \cdot Z\left[\frac{1}{s+0,5} \right] = \frac{0,1z}{z-0,741} \\[20pt]
+					\displaystyle G_d(z) = Z\left[\frac{2,5}{s+0,5} \cdot 0,04\right] = 2,5 \cdot 0,04 \cdot Z\left[\frac{1}{s+0,5} \right] = \frac{0,1z}{z-0,741}  \\[20pt]
 					
-					\displaystyle G_d(z) = \frac{0,1z}{z-0,741} \cdot \frac{(z-0,741)}{0,041} = 2,439z
+					\displaystyle C_d(z) = -\frac{0,1z}{z-0,741} \cdot \frac{z-0,741}{z-0,741 + G_c\cdot 0,041} \cdot  D(z) \rightarrow \\[20pt]
+					
+					\displaystyle \rightarrow C_d(z) = - \frac{0,1z}{z-0,741 + G_c\cdot 0,041} \cdot D(z)
 					
 				\end{array}
 				\right.
 				\quad 
 			\end{equation}
 			
+			
+			
+%			\begin{equation}
+%				\left.
+%				\begin{array}{c}
+%					\displaystyle G_d(z) = Z\left[\frac{2,5}{s+0,5} \cdot 0,04\right] \cdot \frac{1}{H(z)}  \\[20pt]
+%					
+%					\displaystyle Z\left[\frac{2,5}{s+0,5} \cdot 0,04\right] = 2,5 \cdot 0,04 \cdot Z\left[\frac{1}{s+0,5} \right] = \frac{0,1z}{z-0,741} \\[20pt]
+%					
+%					\displaystyle G_d(z) = \frac{0,1z}{z-0,741} \cdot \frac{(z-0,741)}{0,041} = 2,439z
+%					
+%				\end{array}
+%				\right.
+%				\quad 
+%			\end{equation}
+			
 			E para uma entrada degrau unitário tem-se:
 			
 			\begin{equation}
 				\left.
 				\begin{array}{c}
-					\displaystyle C_d(z) = G_d(z) \cdot D(z) \cdot z^{-n} = 2,439z \cdot \frac{z}{z-1} \cdot z^{-n} = \frac{2,439z^{2-n}}{z-1} 
+					\displaystyle \rightarrow C_d(z) = - \frac{0,1z}{z-0,741 + G_c\cdot 0,041} \cdot \frac{z}{z-1} \cdot z^{-n} \rightarrow \\[20pt]
 					
+					\displaystyle \rightarrow C_d(z) = - \frac{0,1z^{2-n}}{(z-0,741 + G_c\cdot 0,041)(z-1)} \\[20pt]
 				\end{array}
 				\right.
 				\quad 
@@ -255,7 +340,7 @@
 			\begin{equation}
 				\left.
 				\begin{array}{c}
-					\displaystyle C(z) = \frac{G_C(z) \cdot 0,041}{z - 0,741 + G_C(z) \cdot 0,041} \cdot Z\left[r(kT)\right] - \frac{2,439z^{2-n}}{z-1}
+					\displaystyle C(z) = \frac{G_C(z) \cdot 0,041}{z - 0,741 + G_C(z) \cdot 0,041} \cdot Z\left[r(kT)\right] - \frac{0,1z^{2-n}}{(z-0,741 + G_c\cdot 0,041)(z-1)}
 				\end{array}
 				\right.
 				\quad 
