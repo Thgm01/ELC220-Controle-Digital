@@ -152,16 +152,21 @@
 			\label{fig:plantaproblema2}
 		\end{figure}
 	
-		\subsection{Função de transferência no domínio z}
-			Para obter a função de transferência no domínio z, é necessário inicialmente converter a planta e os conversores para o domínio z. Com $T=0,6$ min temos:
+		\subsection{Função de transferência no domínio z}	
+			Para obter a função de transferência no domínio z, é necessário inicialmente realizar algumas modificações nas disposições no diagrama de bloco, para viabilizar a construção das funções de transferências, assim como mostra a figura \ref{}.
+			%TODO: Criar diagrama de blocos modificiado
+			
+			
+			Agora com o sistema modificado é necessário converter a planta e os conversores para o domínio z. Com $T=0,6$ min temos:
+					
 		
 			\begin{equation}
 				\left.
 				\begin{array}{c}
 					\displaystyle H(z) = (1 - z^{-1}) \cdot Z\left[\frac{G(s)}{s}\right] \\[20pt]
 					
-					\displaystyle Z\left[\frac{G(s)}{s}\right] = Z\left[\frac{2,0}{s(s+0,5)}\right] = 4 \cdot Z\left[\frac{0,5}{s(s+0,5)}\right] = 4 \cdot \frac{(1 - e^{-0,5T})z}{(z-1)(z-e^{-0,5T})} \\[20pt]
-					\displaystyle H(z) = \frac{z-1}{z} \cdot 4 \cdot \frac{(1 - e^{-0,5T})z}{(z-1)(z-e^{-0,5T})} = \frac{4(1 - e^{-0,5T})}{(z-e^{-0,5T})} = \frac{1,037}{(z-0,741)}
+					\displaystyle Z\left[\frac{G(s)}{s}\right] = Z\left[\frac{2,0}{s(s+0,5)}  \cdot 0,04 \right] = 0,16 \cdot Z\left[\frac{0,5}{s(s+0,5)}\right] = 0,16 \cdot \frac{(1 - e^{-0,5T})z}{(z-1)(z-e^{-0,5T})} \\[20pt]
+					\displaystyle H(z) = \frac{z-1}{z} \cdot 0,16 \cdot \frac{(1 - e^{-0,5T})z}{(z-1)(z-e^{-0,5T})} = \frac{0,16(1 - e^{-0,5T})}{(z-e^{-0,5T})} = \frac{0,041}{(z-0,741)}
 				\end{array}
 				\right.
 				\quad 
@@ -169,6 +174,7 @@
 			\end{equation}
 			
 			Portanto tem-se um sistema representado pelo seguinte diagrama de blocos.
+
 
 \begin{figure}[h]
     \centering
@@ -180,34 +186,31 @@
         % Nós do diagrama
         \node (sum) [sum] {};  % Subtrator
         \node (Gc) [block, right=of sum] {\small$G_c(z)$};
-        \node (H) [block, right=of Gc] {\small $\frac{1,037}{z - 0,741}$};
+        \node (H) [block, right=of Gc] {\small $\frac{0,041}{z - 0,741}$};
         
         % Nós de entrada e saída
         \node (r) [left=of sum] {\small$R(z)$};
         \node (c) [right=of H] {\small$C(z)$};
-        \node (sensor) [block, below=1.2cm of sum, xshift=4.5cm] {\small $0,04$};
         
         % Conexões
         \draw[->] (r) -- node[pos=0.9, above] {\small$+$} (sum.west);
-        \draw[->] (sensor) -| node[pos=0.85, above, xshift=2.5mm] {\small$-$} (sum.south);
-        
+
         \draw[->] (sum) -- (Gc);
         \draw[->] (Gc) -- (H);
         \draw[->] (H) -- (c);
-        \draw[->] (H) -- ++(1.5, 0) |- (sensor.east);
+        
+        \node (fb) [coordinate, below=of Gc] {};
+		\draw[->] (H) -- ++(1.7, 0) |- (fb) -| node[pos=0.85, above, xshift=2.5mm] {\small$-$} (sum) ;
     \end{tikzpicture}
     \caption{Diagrama de blocos da câmara térmica sem distúrbio}
 \end{figure}
-
-
-			
 			
 			E a função de transferência de malha fechada será igual:
 			
 			\begin{equation}
 				\left.
 				\begin{array}{c}
-					\displaystyle \frac{C(z)}{R(z)} = \frac{G_C(z) \cdot \displaystyle \frac{1,037}{(z-0,741)}}{1 + \cdot G_C(z) \cdot \displaystyle \frac{1,037}{(z-0,741)} \cdot 0,04} = \frac{G_C(z) \cdot 1,037}{z - 0,741 + G_C(z) \cdot 0,041}
+					\displaystyle \frac{C(z)}{R(z)} = \frac{G_C(z) \cdot \displaystyle \frac{0,041}{(z-0,741)}}{1 + \cdot G_C(z) \cdot \displaystyle \frac{0,041}{(z-0,741)} } = \frac{G_C(z) \cdot 0,041}{z - 0,741 + G_C(z) \cdot 0,041}
 				\end{array}
 				\right.
 				\quad 
@@ -215,17 +218,36 @@
 			\end{equation}
 		
 		\subsection{Distúrbio no domínio z}
+			Para
+		
 			Admitindo a entrada $r(kT)=0$ o sistema em malha aberta é possível extrair a temperatura $c(t)$ quando há um distúrbio com uma entrada de degrau unitário. 
 			
 			\begin{equation}
 				\left.
 				\begin{array}{c}
-					\displaystyle C_d(z) = G_d(z) \cdot D(z) = Z\left[\frac{2,5}{s+0,5} \cdot \frac{1}{s} \right] = 5 \cdot Z\left[\frac{0,5}{s(s+0,5)} \right] \\[20pt]
-					\displaystyle C_d(z) = 5 \cdot \frac{(1 - e^{-0,5T})z}{(z-1)(z-e^{-0,5T})} = \frac{1,296z}{(z-1)(z-0,741)}
+					\displaystyle G_d(z) = Z\left[\frac{2,5}{s+0,5} \cdot 0,04\right] \cdot \frac{1}{H(z)}  \\[20pt]
+					
+					\displaystyle Z\left[\frac{2,5}{s+0,5} \cdot 0,04\right] = 2,5 \cdot 0,04 \cdot Z\left[\frac{1}{s+0,5} \right] = \frac{0,1z}{z-0,741} \\[20pt]
+					
+					\displaystyle G_d(z) = \frac{0,1z}{z-0,741} \cdot \frac{(z-0,741)}{0,041} = 2,439z
+					
 				\end{array}
 				\right.
 				\quad 
 			\end{equation}
+			
+			E para uma entrada degrau unitário tem-se:
+			
+			\begin{equation}
+				\left.
+				\begin{array}{c}
+					\displaystyle C_d(z) = G_d(z) \cdot D(z) \cdot z^{-n} = 2,439z \cdot \frac{z}{z-1} \cdot z^{-n} = \frac{2,439z^{2-n}}{z-1} 
+					
+				\end{array}
+				\right.
+				\quad 
+			\end{equation}
+						
 			
 		\subsection{Expressão completa do sistema}
 			Para obter a expressão completa do sistema é necessário considerado uma entrada $r(kT)$ genérica e um distúrbio que ocorre num instante n. Dessa forma tem-se:
@@ -233,12 +255,12 @@
 			\begin{equation}
 				\left.
 				\begin{array}{c}
-					\displaystyle C(z) = \frac{G_C(z) \cdot 1,037}{z - 0,741 + G_C(z) \cdot 0,041} \cdot Z\left[r(kT)\right] - \frac{1,296z}{(z-1)(z-0,741)} \cdot z^{-n}
+					\displaystyle C(z) = \frac{G_C(z) \cdot 0,041}{z - 0,741 + G_C(z) \cdot 0,041} \cdot Z\left[r(kT)\right] - \frac{2,439z^{2-n}}{z-1}
 				\end{array}
 				\right.
 				\quad 
 			\end{equation}
-	
+			
 		\subsection{Cenário 1}
 		
 			Admitindo um período de amostragem $T = 0,6$ min e $Gc(z) = 1,0$, a equação de diferenças para c(kT) quando é aplicado um degrau r(kT) = 0,4 h(kT) resulta em:
@@ -246,7 +268,7 @@
 			\begin{equation}
 				\left.
 				\begin{array}{c}
-					\displaystyle C(z) = \frac{1,0 \cdot 1,037}{z - 0,741 + 1,0 \cdot 0,041} \cdot Z\left[r(kT)\right] = \frac{1,037}{z - 0,7} \cdot R(z)
+					\displaystyle C(z) = \frac{1,0 \cdot 0,041}{z - 0,741 + 1,0 \cdot 0,041} \cdot Z\left[r(kT)\right] = \frac{0,041}{z - 0,7} \cdot R(z)
 				\end{array}
 				\right.
 				\quad 
@@ -257,8 +279,8 @@
 			\begin{equation}
 				\left.
 				\begin{array}{c}
-					\displaystyle C(z) = \frac{1,037}{z - 0,7} \cdot R(z) = \frac{1,037 \cdot z^{-1} \cdot R(z)}{1 - 0,7 \cdot z^{-1}}  \rightarrow \\[20pt]
-					\rightarrow \displaystyle c(kT) = 0,7\cdot c[(k-1)T] + 1,037 \cdot r[(k-1)T]
+					\displaystyle C(z) = \frac{0,041}{z - 0,7} \cdot R(z) = \frac{0,041 \cdot z^{-1} \cdot R(z)}{1 - 0,7 \cdot z^{-1}}  \rightarrow \\[20pt]
+					\rightarrow \displaystyle c(kT) = 0,7\cdot c[(k-1)T] + 0,041 \cdot r[(k-1)T]
 				\end{array}
 				\right.
 				\quad 
@@ -280,9 +302,9 @@
 			\begin{equation}
 				\left.
 				\begin{array}{c}
-					\displaystyle \lim_{k \to \infty}f(k) = \lim_{z \to 1}\left[(1-z^{-1})F(z) \right] \rightarrow \lim_{k \to \infty}f(k) = \lim_{z \to 1}\left[ \frac{z-1}{z} \cdot \frac{1,037}{z - 0,7} \cdot 0.4 \cdot \frac{z}{z-1}  \right] \rightarrow \\[20pt]
+					\displaystyle \lim_{k \to \infty}f(k) = \lim_{z \to 1}\left[(1-z^{-1})F(z) \right] \rightarrow \lim_{k \to \infty}f(k) = \lim_{z \to 1}\left[ \frac{z-1}{z} \cdot \frac{0,041}{z - 0,7} \cdot 0.4 \cdot \frac{z}{z-1}  \right] \rightarrow \\[20pt]
 					
-					\displaystyle \rightarrow \lim_{k \to \infty}f(k) =  \lim_{z \to 1}\left[  \frac{0,415}{z - 0,7}  \right] = 1,383
+					\displaystyle \rightarrow \lim_{k \to \infty}f(k) =  \lim_{z \to 1}\left[  \frac{0,0164}{z - 0,7}  \right] = 0,0547 V
 				\end{array}
 				\right.
 				\quad 
@@ -290,6 +312,7 @@
 			
 			Nessa situação temos um sistema estável porém com erro de aproximadamente 86,2\%. Utilizando o MATLAB se obtém o gráfico como mostra a figura \ref{fig:resp_2_4}.
 			
+
 			\begin{figure}[H]
 				\centering
 				\includegraphics[width=0.6\linewidth]{images/resp2d.png}
@@ -297,15 +320,14 @@
 				\label{fig:resp_2_4}
 			\end{figure}
 			
-			
 		\subsection{Erro cenário 1}
 			
 			\begin{equation}
 				\left.
 				\begin{array}{c}
-					\displaystyle e(kT) = r(kT) - 0,04 \cdot c(kT) \rightarrow \\[20pt]
-					\displaystyle \rightarrow e(kT) = r(kT) - 0,04 \cdot (0,7\cdot c[(k-1)T] + 1,037 \cdot r[(k-1)T]) \rightarrow \\[20pt]
-					\displaystyle \rightarrow e(kT) = r(kT) - 0,028 \cdot c[(k-1)T] - 0,041\cdot r[(k-1)T]
+					\displaystyle e(kT) = r(kT) - c(kT) \rightarrow \\[20pt]
+					\displaystyle \rightarrow e(kT) = r(kT) - (0,7\cdot c[(k-1)T] + 0,041 \cdot r[(k-1)T]) \rightarrow \\[20pt]
+					\displaystyle \rightarrow e(kT) = r(kT) - 0,7 \cdot c[(k-1)T] - 0,041\cdot r[(k-1)T]
 				\end{array}
 				\right.
 				\quad 
@@ -313,7 +335,7 @@
 			
 		\subsection{Sistema com ganho infinito}
 			Observando a equação \ref{eq:ftma} fica visível que os polos do sistema tem relação direta com o controlador, para um valor de K muito alto o polo do sistema estará fora do circulo de raio unitário do plano z, portanto esse sistema sera instável para uma entrada de degrau unitário.
-			
+		
 		\subsection{Alterando o período de amostragem}
 			Supondo um período de amostragem de $T=6$ mim é necessário refazer alguns cálculos sendo inicialmente o calculo de $H(z)$ realizado na equação \ref{eq:hz06}.
 			
@@ -322,7 +344,7 @@
 			\begin{array}{c}
 				\displaystyle H(z) = (1 - z^{-1}) \cdot Z\left[\frac{G(s)}{s}\right] \\[20pt]
 				
-				\displaystyle H(z)  = \frac{4(1 - e^{-0,5T})}{(z-e^{-0,5T})} = \frac{3,801}{(z-0,050)}
+				\displaystyle H(z)  = \frac{0,16(1 - e^{-0,5T})}{(z-e^{-0,5T})} = \frac{0,152}{(z-0,050)}
 			\end{array}
 			\right.
 			\quad 
@@ -330,26 +352,27 @@
 		
 		Na sequencia se obtém a função de transferência de malha fechada.
 		
+			
 		\begin{equation}
 			\left.
 			\begin{array}{c}
-				\displaystyle \frac{C(z)}{R(z)} = \frac{G_C(z) \cdot \displaystyle \frac{3,801}{(z-0,050)}}{1 + \cdot G_C(z) \cdot \displaystyle \frac{3,801}{(z-0,050)} \cdot 0,04} = \frac{G_C(z) \cdot 3,801}{z - 0,050 + G_C(z) \cdot 0,152} \rightarrow \\[30pt]
+				\displaystyle \frac{C(z)}{R(z)} = \frac{G_C(z) \cdot \displaystyle \frac{0,152}{(z-0,050)}}{1 + \cdot G_C(z) \cdot \displaystyle \frac{0,152}{(z-0,050)} \cdot 0,04} = \frac{G_C(z) \cdot 0,152}{z - 0,050 + G_C(z) \cdot 0,152} \rightarrow \\[30pt]
 				
-				\displaystyle \rightarrow \frac{C(z)}{R(z)} = \frac{3,801}{z + 0,102}
+				\displaystyle \rightarrow \frac{C(z)}{R(z)} = \frac{0,152}{z + 0,102}
 			\end{array}
 			\right.
 			\quad 
 			\label{eq:ftma}
 		\end{equation}
-		
+
 		Utilizando o teorema do valor final
 		
 		\begin{equation}
 			\left.
 			\begin{array}{c}
-				\displaystyle \lim_{k \to \infty}f(k) = \lim_{z \to 1}\left[(1-z^{-1})F(z) \right] \rightarrow \lim_{k \to \infty}f(k) = \lim_{z \to 1}\left[ \frac{z-1}{z} \cdot \frac{3,801}{z + 0,102} \cdot 0.4 \cdot \frac{z}{z-1}  \right] \rightarrow \\[20pt]
+				\displaystyle \lim_{k \to \infty}f(k) = \lim_{z \to 1}\left[(1-z^{-1})F(z) \right] \rightarrow \lim_{k \to \infty}f(k) = \lim_{z \to 1}\left[ \frac{z-1}{z} \cdot \frac{0,152}{z + 0,102} \cdot 0.4 \cdot \frac{z}{z-1}  \right] \rightarrow \\[20pt]
 				
-				\displaystyle \rightarrow \lim_{k \to \infty}f(k) =  \lim_{z \to 1}\left[  \frac{1,520}{z + 0,102}  \right] = 1,380
+				\displaystyle \rightarrow \lim_{k \to \infty}f(k) =  \lim_{z \to 1}\left[  \frac{0,0608}{z + 0,102}  \right] = 0,0551
 			\end{array}
 			\right.
 			\quad 
@@ -362,7 +385,8 @@
 			\includegraphics[width=0.5\linewidth]{images/resp2g.png}
 			\label{fig:resposta_g}
 		\end{figure}
-		
+
+
 \section{Problema 3}
 A figura 3 mostra o sistema de controle de posição de uma junta de um braço robótico.
 \begin{figure}[H]
@@ -384,7 +408,7 @@ Admitindo $T = 0,1$ s, $Gc(z) = 1,0$ e $K=2,4$ é necessário inicialmente reali
 	\end{equation}
 	
 	Sendo assim o diagrama de blocos fica como mostra a figura \ref{img:gso}.
-	
+
 	\begin{figure}[H]
 	    \centering
 	    \begin{tikzpicture}[
@@ -398,25 +422,26 @@ Admitindo $T = 0,1$ s, $Gc(z) = 1,0$ e $K=2,4$ é necessário inicialmente reali
 	        \node (k) [block, right=of Gso] {\small$2,4$};   
 	        \node (Gs) [block, right=of k] {\small $\frac{200}{s(0,5s+1)}$};
 	        \node (red) [block, right=of Gs] {\small $\frac{1}{100}$};
-	        	        
+	        \node (sensor) [block, right=of red] {\small $0,07$};	        
 	        
 	        % Nós de entrada e saída
 	        \node (angleIn) [left=of sum] {\small$\theta_c$};
-	        \node (angleOut) [right=of red] {\small$\theta_c$};
-	        \node (sensor) [block, below=1.2cm of sum, xshift=4.5cm] {\small $0,07$};
+	        \node (angleOut) [right=of sensor] {\small$\theta_c$};
+	        
 	        
 	        % Conexões
 	        \draw[->] (angleIn) -- node[pos=0.9, above] {\small$+$} (sum.west);
-	        \draw[->] (sensor) -| node[pos=0.85, above, xshift=2.5mm] {\small$-$} (sum.south);
 	        
 	        \draw[->] (sum) -- (Gso);
 	        \draw[->] (Gso) -- (k);
 	        \draw[->] (k) -- (Gs);
 	        \draw[->] (Gs) -- (red);
-	        	        
-	      
-	        \draw[->] (red) -- (angleOut);
-	        \draw[->] (red) -- ++(1, 0) |- (sensor.east);
+	        \draw[->] (red) -- (sensor);
+	   
+	        \draw[->] (sensor) -- (angleOut);
+	        
+	        \node (fb) [coordinate, below=of Gs] {};
+			\draw[->] (sensor) -- ++(1, 0) |- (fb) -| node[pos=0.85, above, xshift=2.5mm] {\small$-$} (sum) ;
 	    \end{tikzpicture}
 	    \caption{Diagrama de blocos de uma junta de braço robótico}
 	    \label{img:gso}
@@ -426,7 +451,7 @@ Admitindo $T = 0,1$ s, $Gc(z) = 1,0$ e $K=2,4$ é necessário inicialmente reali
 	\begin{equation}
 		\left.
 		\begin{array}{c}
-			\displaystyle G_{c}(s) = \frac{20 \cdot 24 \cdot 200}{(s+20) \cdot (0,5s^2+s)\cdot 100} = \frac{96}{0,5s^3 + 11s^2 + 20s}
+			\displaystyle G_{c}(s) = \frac{20 \cdot 2,4 \cdot 200 \cdot 0,07}{(s+20) \cdot (0,5s^2+s)\cdot 100} = \frac{6,72}{0,5s^3 + 11s^2 + 20s}
 		\end{array}
 		\right.
 		\quad 
@@ -434,12 +459,13 @@ Admitindo $T = 0,1$ s, $Gc(z) = 1,0$ e $K=2,4$ é necessário inicialmente reali
 	
 	E a função de malha fechada será:
 	
+	
 	\begin{equation}
 		\left.
 		\begin{array}{c}
-			\displaystyle G(s) = \frac{\displaystyle \frac{96}{0,5s^3 + 11s^2 + 20s}}{1 + \displaystyle \frac{96}{0,5s^3 + 11s^2 + 20s} \cdot 0,07} = \frac{192}{s^3 + 22s^2 +40s + 13,44} \rightarrow \\[30pt]
+			\displaystyle G(s) = \frac{\displaystyle \frac{6,72}{0,5s^3 + 11s^2 + 20s}}{1 + \displaystyle \frac{6,72}{0,5s^3 + 11s^2 + 20s}} = \frac{13,44}{s^3 + 22s^2 +40s + 13,44} \rightarrow \\[30pt]
 			
-			 \rightarrow  \displaystyle G(s) = \frac{0,53}{s+20,04} + \frac{9,07}{s+0,44} - \frac{9,60}{s+1,52}
+			 \rightarrow  \displaystyle G(s) = \frac{0.037}{s+20,04} + \frac{0.634}{s+0,44} - \frac{0.671}{s+1,52}
 		\end{array}
 		\right.
 		\quad 
@@ -450,7 +476,7 @@ Admitindo $T = 0,1$ s, $Gc(z) = 1,0$ e $K=2,4$ é necessário inicialmente reali
 	\begin{equation}
 		\left.
 		\begin{array}{c}
-			\displaystyle G(z) = \frac{0,011(z+1)^3}{(z-0,957)(z-0,8586)z}
+			\displaystyle G(z) = \frac{0.00076(z+1)^3}{(z-0,957)(z-0,8586)(z+0.00093)}
 		\end{array}
 		\right.
 		\quad 

@@ -2,11 +2,11 @@ clear; close all;
 
 T = 6*60;
 
-Hz = tf(3.801, [1 -0.05], T);
+Hz = tf(0.152, [1 -0.05], T);
 Gz = tf(1, 1, T);
 
 ftma = series(Hz, Gz);
-ftmf = feedback(ftma, 0.04);
+ftmf = feedback(ftma, 1)
 
 t = 0: T:10000;
 [y_t, t] = step(ftmf*0.4, t);
