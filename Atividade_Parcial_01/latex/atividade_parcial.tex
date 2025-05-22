@@ -34,7 +34,8 @@
 	\end{center}
 
 	\begin{center}
-		\centering{\textbf{xxxxxxxx(xx.xxx.xxx-x)}}\\
+		\centering{\textbf{Gabrielle Magalhães Veras Braga (11.121.557-0)}}\\
+		\centering{\textbf{Gustavo Rosell Collado (11.121.526-5)}}\\
 		\centering{\textbf{Massiel Blandy Ramón (11.122.397-0)}}\\
 		\centering{\textbf{Thiago Travagini Moura (11.121.329-4)}}
 	\end{center}
@@ -74,7 +75,7 @@
 
 		\begin{gather}
 			C(s) = \frac{2,0}{s+0,5} \cdot \frac{5,0}{s} = \frac{10,0}{s^2 + 0,5s} = \frac{20}{s} - \frac{20}{s+0,5} \\[20pt]
-			c(t) = \mathcal{L}^{-1} \{ C(s) \} = 20 + 20e^{-0,5t}
+			c(t) = \mathcal{L}^{-1} \{ C(s) \} = 20 - 20e^{-0,5t}
 		\end{gather}
 	
 		Utilizando o \textit{MATLAB} foi obtido o seguinte gráfico:
@@ -92,7 +93,7 @@
 		Sendo feita o mesmo procedimento que o item anterior, porém adicionando uma condição inicial, pode-se dizer que a única mudança será:
 		
 		\begin{equation}
-			c(t) = c_{Anterior}(t) + x_0 \rightarrow c(t) = 45 + 20e^{-0,5t}
+			c(t) = c_{Anterior}(t) + x_0 \rightarrow c(t) = 45 - 20e^{-0,5t}
 		\end{equation}
 	
 		E com essa equação tem-se o seguinte gráfico.
@@ -153,7 +154,7 @@
 		\end{figure}
 	
 		\subsection{Função de transferência no domínio z}	
-			Para obter a função de transferência no domínio z, é necessário inicialmente realizar algumas modificações nas disposições no diagrama de bloco, para viabilizar a construção das funções de transferências, assim como mostra a figura \ref{}.
+			Para obter a função de transferência no domínio z, é necessário inicialmente realizar algumas modificações nas disposições no diagrama de bloco, para viabilizar a construção das funções de transferências, assim como mostra a figura \ref{fig:diagrama_palnta2_final}.
 
 
 \begin{figure}[h]
@@ -161,29 +162,33 @@
     \begin{tikzpicture}[
         block/.style={draw, rectangle, minimum width=1.5cm, minimum height=1cm, align=center},
         sum/.style={draw, circle, node distance=1cm, inner sep=1pt, minimum size=0.5cm},
-        node distance=2cm, >=latex]
+        node distance=1cm, >=latex]
         
         % Nós do diagrama
         \node (sum) [sum, xshift=0.2cm] {};  % Subtrator
         \node (Gc) [block, right=of sum] {\small$G_c(z)$};
         \node (H) [block, right=of Gc] {\small$H(z)$};
         \node (Gd) [block, above=of sum, xshift=-1.5cm] {\small$\frac{G_d(z)}{G_c(z) \cdot H(z)}$}; % Bloco deslocado para a esquerda
+        \node (s) [block, right=of H] {\small$Sensor$};
+        \node (sinv) [block, right=of s] {\small$\frac{1}{Sensor}$};
         
         % Nós de entrada e saída
         \node (r) [left=of sum] {\small$R(z)$};
-        \node (c) [right=of H] {\small$C(z)$};
+        \node (c) [right=of sinv] {\small$C(z)$};
         \node (d) [left=of Gd] {\small$D(z)$};
         
         % Conexões
         \draw[->] (r) -- node[pos=0.9, above] {\small$+$} (sum.west);
         \draw[->] (sum) -- (Gc);
         \draw[->] (Gc) -- (H);
-        \draw[->] (H) -- (c);
+        \draw[->] (H) -- (s);
+        \draw[->] (s) -- (sinv);
+        \draw[->] (sinv) -- (c);
         \draw[->] (d) -- (Gd);
         
         % Realimentação
         \node (fb) [coordinate, below=of Gc] {};
-        \draw[->] (H) -- ++(1.7, 0) |- (fb) -| node[pos=0.85, above, xshift=2.5mm] {\small$-$} (sum);
+        \draw[->] (s) -- ++(1, 0) |- (fb) -| node[pos=0.85, above, xshift=2.5mm] {\small$-$} (sum);
         
 		\draw[->] (Gd.east) -| node[pos=0.95, above, , xshift=0.2cm] {\small$-$} (sum.north);
 
@@ -199,8 +204,8 @@
 				\begin{array}{c}
 					\displaystyle H(z) = (1 - z^{-1}) \cdot Z\left[\frac{G(s)}{s}\right] \\[20pt]
 					
-					\displaystyle Z\left[\frac{G(s)}{s}\right] = Z\left[\frac{2,0}{s(s+0,5)}  \cdot 0,04 \right] = 0,16 \cdot Z\left[\frac{0,5}{s(s+0,5)}\right] = 0,16 \cdot \frac{(1 - e^{-0,5T})z}{(z-1)(z-e^{-0,5T})} \\[20pt]
-					\displaystyle H(z) = \frac{z-1}{z} \cdot 0,16 \cdot \frac{(1 - e^{-0,5T})z}{(z-1)(z-e^{-0,5T})} = \frac{0,16(1 - e^{-0,5T})}{(z-e^{-0,5T})} = \frac{0,041}{(z-0,741)}
+					\displaystyle Z\left[\frac{G(s)}{s}\right] = Z\left[\frac{2,0}{s(s+0,5)}  \right] = 4 \cdot Z\left[\frac{0,5}{s(s+0,5)}\right] = 4 \cdot \frac{(1 - e^{-0,5T})z}{(z-1)(z-e^{-0,5T})} \\[20pt]
+					\displaystyle H(z) = \frac{z-1}{z} \cdot 4 \cdot \frac{(1 - e^{-0,5T})z}{(z-1)(z-e^{-0,5T})} = \frac{4(1 - e^{-0,5T})}{(z-e^{-0,5T})} = \frac{1,036}{(z-0,741)}
 				\end{array}
 				\right.
 				\quad 
@@ -215,26 +220,31 @@
 		    \begin{tikzpicture}[
 		        block/.style={draw, rectangle, minimum width=1.5cm, minimum height=1cm, align=center},
 		        sum/.style={draw, circle, node distance=1cm, inner sep=1pt, minimum size=0.5cm},
-		        node distance=2cm, >=latex]
+		        node distance=1cm, >=latex]
 		        
 		        % Nós do diagrama
 		        \node (sum) [sum] {};  % Subtrator
 		        \node (Gc) [block, right=of sum] {\small$G_c(z)$};
 		        \node (H) [block, right=of Gc] {\small $\frac{0,041}{z - 0,741}$};
+		        \node (s) [block, right=of H] {\small $0,04$};
+              	\node (sinv) [block, right=of s] {\small$\frac{1}{0,04}$};
+		        
 		        
 		        % Nós de entrada e saída
 		        \node (r) [left=of sum] {\small$R(z)$};
-		        \node (c) [right=of H] {\small$C(z)$};
+		        \node (c) [right=of sinv] {\small$C(z)$};
 		        
 		        % Conexões
 		        \draw[->] (r) -- node[pos=0.9, above] {\small$+$} (sum.west);
 		
 		        \draw[->] (sum) -- (Gc);
 		        \draw[->] (Gc) -- (H);
-		        \draw[->] (H) -- (c);
+		        \draw[->] (H) -- (s);
+		        \draw[->] (s) -- (sinv);
+		        \draw[->] (sinv) -- (c);
 		        
 		        \node (fb) [coordinate, below=of Gc] {};
-				\draw[->] (H) -- ++(1.7, 0) |- (fb) -| node[pos=0.85, above, xshift=2.5mm] {\small$-$} (sum) ;
+				\draw[->] (s) -- ++(1, 0) |- (fb) -| node[pos=0.85, above, xshift=2.5mm] {\small$-$} (sum) ;
 		    \end{tikzpicture}
 		    \caption{Diagrama de blocos da câmara térmica sem distúrbio}
 		\end{figure}
@@ -244,7 +254,7 @@
 			\begin{equation}
 				\left.
 				\begin{array}{c}
-					\displaystyle \frac{C(z)}{R(z)} = \frac{G_C(z) \cdot \displaystyle \frac{0,041}{(z-0,741)}}{1 + \cdot G_C(z) \cdot \displaystyle \frac{0,041}{(z-0,741)} } = \frac{G_C(z) \cdot 0,041}{z - 0,741 + G_C(z) \cdot 0,041}
+					\displaystyle \frac{C(z)}{R(z)} = \frac{G_C(z) \cdot \displaystyle \frac{1,036}{(z-0,741)} \cdot 0,04}{1 + \cdot G_C(z) \cdot \displaystyle \frac{1,036}{(z-0,741)} \cdot 0,04} \cdot \frac{1}{0,04} = \frac{G_C(z) \cdot 1,036}{z - 0,741 + G_C(z) \cdot 0,041}
 				\end{array}
 				\right.
 				\quad 
@@ -252,52 +262,58 @@
 			\end{equation}
 		
 		\subsection{Distúrbio no domínio z}
-			Visualizando a figura \ref{fig:diagrama_palnta2_final} e admitindo a entrada $r(kT)=0$, é possível extrair a temperatura $c(t)$ quando há um distúrbio com uma entrada de degrau unitário tem-se o seguinte diagrama de blocos.
+			Visualizando a figura \ref{fig:diagrama_planta2_disturbio} e admitindo a entrada $r(kT)=0$, é possível extrair a temperatura $c(t)$ quando há um distúrbio com uma entrada de degrau unitário tem-se o seguinte diagrama de blocos.
 			
 			\begin{figure}[h]
 			    \centering
 			    \begin{tikzpicture}[
 			        block/.style={draw, rectangle, minimum width=1.5cm, minimum height=1cm, align=center},
 			        sum/.style={draw, circle, node distance=1cm, inner sep=1pt, minimum size=0.5cm},
-			        node distance=2cm, >=latex]
+			        node distance=1cm, >=latex]
 			        
 			        % Nós do diagrama
 			        \node (sum) [sum, xshift=0.2cm] {};  % Subtrator
 			        \node (Gc) [block, right=of sum] {\small$G_c(z)$};
 			        \node (H) [block, right=of Gc] {\small$H(z)$};
 			        \node (Gd) [block, left=of sum] {\small$\frac{G_d(z)}{G_c(z) \cdot H(z)}$}; % Bloco deslocado para a esquerda
+   			        \node (s) [block, right=of H] {\small$0,04$};
+			        
+			        \node (sinv) [block, right=of s] {\small$\frac{1}{0,04}$};
 			        
 			        % Nós de entrada e saída
-			        \node (c) [right=of H] {\small$C(z)$};
+			        \node (c) [right=of sinv] {\small$C(z)$};
 			        \node (d) [left=of Gd] {\small$D(z)$};
 			        
 			        % Conexões
 			        \draw[->] (sum) -- (Gc);
 			        \draw[->] (Gc) -- (H);
-			        \draw[->] (H) -- (c);
+			        \draw[->] (H) -- (s);
+			        \draw[->] (s) -- (sinv);
+			        \draw[->] (sinv) -- (c);
 			        \draw[->] (d) -- (Gd);
 			        
 			        % Realimentação
 			        \node (fb) [coordinate, below=of Gc] {};
-			        \draw[->] (H) -- ++(1.7, 0) |- (fb) -| node[pos=0.85, above, xshift=2.5mm] {\small$-$} (sum);
+			        \draw[->] (s) -- ++(1, 0) |- (fb) -| node[pos=0.85, above, xshift=2.5mm] {\small$-$} (sum);
 			        
 					\draw[->] (Gd) -- node[pos=0.85, above, , xshift=0.2cm] {\small$-$} (sum);
 			
 			    \end{tikzpicture}
 			    \caption{Diagrama de blocos do distúrbio}
+			    \label{fig:diagrama_planta2_disturbio}
 			\end{figure}
 			
 			
 			\begin{equation}
 				\left.
 				\begin{array}{c}
-					\displaystyle C_d(z) = -\frac{G_d(z)}{G_c(z) \cdot H(z)} \cdot \frac{G_c(z) \cdot H(z)}{1 + G_c(z) \cdot H(z)} = \frac{G_d(z)}{1 + G_c(z) \cdot H(z)} \cdot D(z) \\[20pt]
+					\displaystyle C_d(z) = -\frac{G_d(z)}{G_c(z) \cdot H(z)} \cdot \frac{G_c(z) \cdot H(z) \cdot 0,04}{1 + G_c(z) \cdot H(z) \cdot 0,04} \cdot \frac{1}{0,04} = - \frac{G_d(z)}{1 + G_c(z) \cdot H(z) \cdot 0,04} \cdot D(z) \\[20pt]
 					
-					\displaystyle G_d(z) = Z\left[\frac{2,5}{s+0,5} \cdot 0,04\right] = 2,5 \cdot 0,04 \cdot Z\left[\frac{1}{s+0,5} \right] = \frac{0,1z}{z-0,741}  \\[20pt]
+					\displaystyle G_d(z) = Z\left[\frac{2,5}{s+0,5} \right] = 2,5 \cdot Z\left[\frac{1}{s+0,5} \right] = \frac{2,5z}{z-0,741}  \\[20pt]
 					
-					\displaystyle C_d(z) = -\frac{0,1z}{z-0,741} \cdot \frac{z-0,741}{z-0,741 + G_c\cdot 0,041} \cdot  D(z) \rightarrow \\[20pt]
+					\displaystyle C_d(z) = -\frac{2,5z}{z-0,741} \cdot \frac{z-0,741}{z-0,741 + G_c\cdot 0,041} \cdot  D(z) \rightarrow \\[20pt]
 					
-					\displaystyle \rightarrow C_d(z) = - \frac{0,1z}{z-0,741 + G_c\cdot 0,041} \cdot D(z)
+					\displaystyle \rightarrow C_d(z) = - \frac{2,5z}{z-0,741 + G_c\cdot 0,041} \cdot D(z)
 					
 				\end{array}
 				\right.
@@ -325,9 +341,9 @@
 			\begin{equation}
 				\left.
 				\begin{array}{c}
-					\displaystyle \rightarrow C_d(z) = - \frac{0,1z}{z-0,741 + G_c\cdot 0,041} \cdot \frac{z}{z-1} \cdot z^{-n} \rightarrow \\[20pt]
+					\displaystyle \rightarrow C_d(z) = - \frac{2,5z}{z-0,741 + G_c\cdot 0,041} \cdot \frac{z}{z-1} \cdot z^{-n} \rightarrow \\[20pt]
 					
-					\displaystyle \rightarrow C_d(z) = - \frac{0,1z^{2-n}}{(z-0,741 + G_c\cdot 0,041)(z-1)} \\[20pt]
+					\displaystyle \rightarrow C_d(z) = - \frac{2,5z^{2-n}}{(z-0,741 + G_c\cdot 0,041)(z-1)} \\[20pt]
 				\end{array}
 				\right.
 				\quad 
@@ -340,7 +356,7 @@
 			\begin{equation}
 				\left.
 				\begin{array}{c}
-					\displaystyle C(z) = \frac{G_C(z) \cdot 0,041}{z - 0,741 + G_C(z) \cdot 0,041} \cdot Z\left[r(kT)\right] - \frac{0,1z^{2-n}}{(z-0,741 + G_c\cdot 0,041)(z-1)}
+					\displaystyle C(z) = \frac{G_C(z) \cdot 1,036}{z - 0,741 + G_C(z) \cdot 0,041} \cdot Z\left[r(kT)\right] - \frac{2,5z^{2-n}}{(z-0,741 + G_c\cdot 0,041)(z-1)}
 				\end{array}
 				\right.
 				\quad 
@@ -353,7 +369,7 @@
 			\begin{equation}
 				\left.
 				\begin{array}{c}
-					\displaystyle C(z) = \frac{1,0 \cdot 0,041}{z - 0,741 + 1,0 \cdot 0,041} \cdot Z\left[r(kT)\right] = \frac{0,041}{z - 0,7} \cdot R(z)
+					\displaystyle C(z) = \frac{1,0 \cdot 1,036}{z - 0,741 + 1,0 \cdot 0,041} \cdot Z\left[r(kT)\right] = \frac{1,036\cdot 0,4}{z - 0,7} \cdot H(z)
 				\end{array}
 				\right.
 				\quad 
@@ -364,8 +380,8 @@
 			\begin{equation}
 				\left.
 				\begin{array}{c}
-					\displaystyle C(z) = \frac{0,041}{z - 0,7} \cdot R(z) = \frac{0,041 \cdot z^{-1} \cdot R(z)}{1 - 0,7 \cdot z^{-1}}  \rightarrow \\[20pt]
-					\rightarrow \displaystyle c(kT) = 0,7\cdot c[(k-1)T] + 0,041 \cdot r[(k-1)T]
+					\displaystyle C(z) = \frac{0,414}{z - 0,7} \cdot H(z) = \frac{0,414 \cdot z^{-1} \cdot H(z)}{1 - 0,7 \cdot z^{-1}}  \rightarrow \\[20pt]
+					\rightarrow \displaystyle c(kT) = 0,7\cdot c[(k-1)T] + 0,414 \cdot h[(k-1)T]
 				\end{array}
 				\right.
 				\quad 
@@ -383,13 +399,12 @@
 			\end{equation}
 			
 			Utilizando também o teorema do valor final tem-se:
-			
 			\begin{equation}
 				\left.
 				\begin{array}{c}
-					\displaystyle \lim_{k \to \infty}f(k) = \lim_{z \to 1}\left[(1-z^{-1})F(z) \right] \rightarrow \lim_{k \to \infty}f(k) = \lim_{z \to 1}\left[ \frac{z-1}{z} \cdot \frac{0,041}{z - 0,7} \cdot 0.4 \cdot \frac{z}{z-1}  \right] \rightarrow \\[20pt]
+					\displaystyle \lim_{k \to \infty}f(k) = \lim_{z \to 1}\left[(1-z^{-1})F(z) \right] \rightarrow \lim_{k \to \infty}f(k) = \lim_{z \to 1}\left[ \frac{z-1}{z} \cdot \frac{1,036}{z - 0,7} \cdot 0.4 \cdot \frac{z}{z-1}  \right] \rightarrow \\[20pt]
 					
-					\displaystyle \rightarrow \lim_{k \to \infty}f(k) =  \lim_{z \to 1}\left[  \frac{0,0164}{z - 0,7}  \right] = 0,0547 V
+					\displaystyle \rightarrow \lim_{k \to \infty}f(k) =  \lim_{z \to 1}\left[  \frac{0,414}{z - 0,7}  \right] = 1,38 \celsius
 				\end{array}
 				\right.
 				\quad 
@@ -411,8 +426,8 @@
 				\left.
 				\begin{array}{c}
 					\displaystyle e(kT) = r(kT) - c(kT) \rightarrow \\[20pt]
-					\displaystyle \rightarrow e(kT) = r(kT) - (0,7\cdot c[(k-1)T] + 0,041 \cdot r[(k-1)T]) \rightarrow \\[20pt]
-					\displaystyle \rightarrow e(kT) = r(kT) - 0,7 \cdot c[(k-1)T] - 0,041\cdot r[(k-1)T]
+					\displaystyle \rightarrow e(kT) = r(kT) - (0,7\cdot c[(k-1)T] + 0,414 \cdot h[(k-1)T]) \rightarrow \\[20pt]
+					\displaystyle \rightarrow e(kT) = r(kT) - 0,7 \cdot c[(k-1)T] - 0,414\cdot h[(k-1)T]
 				\end{array}
 				\right.
 				\quad 
@@ -423,13 +438,13 @@
 		
 		\subsection{Alterando o período de amostragem}
 			Supondo um período de amostragem de $T=6$ mim é necessário refazer alguns cálculos sendo inicialmente o calculo de $H(z)$ realizado na equação \ref{eq:hz06}.
-			
+			%TODO: Continuar daqui 
 			\begin{equation}
 			\left.
 			\begin{array}{c}
 				\displaystyle H(z) = (1 - z^{-1}) \cdot Z\left[\frac{G(s)}{s}\right] \\[20pt]
 				
-				\displaystyle H(z)  = \frac{0,16(1 - e^{-0,5T})}{(z-e^{-0,5T})} = \frac{0,152}{(z-0,050)}
+				\displaystyle H(z)  = \frac{4(1 - e^{-0,5T})}{(z-e^{-0,5T})} = \frac{3,80}{(z-0,050)}
 			\end{array}
 			\right.
 			\quad 
@@ -441,9 +456,9 @@
 		\begin{equation}
 			\left.
 			\begin{array}{c}
-				\displaystyle \frac{C(z)}{R(z)} = \frac{G_C(z) \cdot \displaystyle \frac{0,152}{(z-0,050)}}{1 + \cdot G_C(z) \cdot \displaystyle \frac{0,152}{(z-0,050)} \cdot 0,04} = \frac{G_C(z) \cdot 0,152}{z - 0,050 + G_C(z) \cdot 0,152} \rightarrow \\[30pt]
+				\displaystyle \frac{C(z)}{R(z)} = \frac{G_C(z) \cdot \displaystyle \frac{3,80}{(z-0,050)} \cdot 0,04}{1 + \cdot G_C(z) \cdot \displaystyle \frac{3,80}{(z-0,050)} \cdot 0,04} \cdot \frac{1}{0,04} = \frac{G_C(z) \cdot 3,80}{z - 0,050 + G_C(z) \cdot 0,152} \rightarrow \\[30pt]
 				
-				\displaystyle \rightarrow \frac{C(z)}{R(z)} = \frac{0,152}{z + 0,102}
+				\displaystyle \rightarrow \frac{C(z)}{R(z)} = \frac{3,80}{z + 0,102}
 			\end{array}
 			\right.
 			\quad 
@@ -455,9 +470,9 @@
 		\begin{equation}
 			\left.
 			\begin{array}{c}
-				\displaystyle \lim_{k \to \infty}f(k) = \lim_{z \to 1}\left[(1-z^{-1})F(z) \right] \rightarrow \lim_{k \to \infty}f(k) = \lim_{z \to 1}\left[ \frac{z-1}{z} \cdot \frac{0,152}{z + 0,102} \cdot 0.4 \cdot \frac{z}{z-1}  \right] \rightarrow \\[20pt]
+				\displaystyle \lim_{k \to \infty}f(k) = \lim_{z \to 1}\left[(1-z^{-1})F(z) \right] \rightarrow \lim_{k \to \infty}f(k) = \lim_{z \to 1}\left[ \frac{z-1}{z} \cdot \frac{3,80}{z + 0,102} \cdot 0.4 \cdot \frac{z}{z-1}  \right] \rightarrow \\[20pt]
 				
-				\displaystyle \rightarrow \lim_{k \to \infty}f(k) =  \lim_{z \to 1}\left[  \frac{0,0608}{z + 0,102}  \right] = 0,0551
+				\displaystyle \rightarrow \lim_{k \to \infty}f(k) =  \lim_{z \to 1}\left[  \frac{1,52}{z + 0,102}  \right] = 1,38 \celsius
 			\end{array}
 			\right.
 			\quad 
@@ -507,26 +522,29 @@ Admitindo $T = 0,1$ s, $Gc(z) = 1,0$ e $K=2,4$ é necessário inicialmente reali
 	        \node (k) [block, right=of Gso] {\small$2,4$};   
 	        \node (Gs) [block, right=of k] {\small $\frac{200}{s(0,5s+1)}$};
 	        \node (red) [block, right=of Gs] {\small $\frac{1}{100}$};
-	        \node (sensor) [block, right=of red] {\small $0,07$};	        
+	        \node (sensor) [block, below=of Gs, xshift=-1cm] {\small $0,07$};	        
 	        
 	        % Nós de entrada e saída
 	        \node (angleIn) [left=of sum] {\small$\theta_c$};
-	        \node (angleOut) [right=of sensor] {\small$\theta_c$};
+	        \node (angleOut) [right=of red] {\small$\theta_c$};
 	        
 	        
-	        % Conexões
+%	        % Conexões
 	        \draw[->] (angleIn) -- node[pos=0.9, above] {\small$+$} (sum.west);
 	        
 	        \draw[->] (sum) -- (Gso);
 	        \draw[->] (Gso) -- (k);
 	        \draw[->] (k) -- (Gs);
 	        \draw[->] (Gs) -- (red);
-	        \draw[->] (red) -- (sensor);
-	   
-	        \draw[->] (sensor) -- (angleOut);
+	        \draw[->] (red) -- (angleOut);
 	        
-	        \node (fb) [coordinate, below=of Gs] {};
-			\draw[->] (sensor) -- ++(1, 0) |- (fb) -| node[pos=0.85, above, xshift=2.5mm] {\small$-$} (sum) ;
+	        
+	   		\draw[->] (red) -- ++(1, 0) |- (sensor);
+	        \draw[->] (sensor) -| node[pos=0.85, above, xshift=2.5mm] {\small$-$} (sum.south);
+	        
+	        
+%	        \node (fb) [coordinate, below=of Gs] {};
+%			\draw[->] (red) -- ++(1, 0) |- (sum) -| node[pos=0.85, above, xshift=2.5mm] {\small$-$} (sum) ;
 	    \end{tikzpicture}
 	    \caption{Diagrama de blocos de uma junta de braço robótico}
 	    \label{img:gso}
@@ -536,7 +554,7 @@ Admitindo $T = 0,1$ s, $Gc(z) = 1,0$ e $K=2,4$ é necessário inicialmente reali
 	\begin{equation}
 		\left.
 		\begin{array}{c}
-			\displaystyle G_{c}(s) = \frac{20 \cdot 2,4 \cdot 200 \cdot 0,07}{(s+20) \cdot (0,5s^2+s)\cdot 100} = \frac{6,72}{0,5s^3 + 11s^2 + 20s}
+			\displaystyle G_{c}(s) = \frac{20 \cdot 2,4 \cdot 200}{(s+20) \cdot (0,5s^2+s)\cdot 100} = \frac{96}{0,5s^3 + 11s^2 + 20s}
 		\end{array}
 		\right.
 		\quad 
@@ -548,9 +566,9 @@ Admitindo $T = 0,1$ s, $Gc(z) = 1,0$ e $K=2,4$ é necessário inicialmente reali
 	\begin{equation}
 		\left.
 		\begin{array}{c}
-			\displaystyle G(s) = \frac{\displaystyle \frac{6,72}{0,5s^3 + 11s^2 + 20s}}{1 + \displaystyle \frac{6,72}{0,5s^3 + 11s^2 + 20s}} = \frac{13,44}{s^3 + 22s^2 +40s + 13,44} \rightarrow \\[30pt]
+			\displaystyle G(s) = \frac{\displaystyle \frac{96}{0,5s^3 + 11s^2 + 20s}}{1 + \displaystyle \frac{6,72}{0,5s^3 + 11s^2 + 20s}\cdot 0,07} = \frac{192}{s^3 + 22s^2 +40s + 13,44} \rightarrow \\[30pt]
 			
-			 \rightarrow  \displaystyle G(s) = \frac{0.037}{s+20,04} + \frac{0.634}{s+0,44} - \frac{0.671}{s+1,52}
+			 \rightarrow  \displaystyle G(s) = \frac{0,529}{s+20,04} + \frac{9,057}{s+0,44} - \frac{9,586}{s+1,52}
 		\end{array}
 		\right.
 		\quad 
@@ -561,7 +579,7 @@ Admitindo $T = 0,1$ s, $Gc(z) = 1,0$ e $K=2,4$ é necessário inicialmente reali
 	\begin{equation}
 		\left.
 		\begin{array}{c}
-			\displaystyle G(z) = \frac{0.00076(z+1)^3}{(z-0,957)(z-0,8586)(z+0.00093)}
+			\displaystyle G(z) = \frac{0.011(z+1)^3}{(z-0,957)(z-0,8586)(z+0.00093)}
 		\end{array}
 		\right.
 		\quad 
@@ -597,6 +615,6 @@ Admitindo $T = 0,1$ s, $Gc(z) = 1,0$ e $K=2,4$ é necessário inicialmente reali
 			\quad 
 		\end{equation}
 		
-		Portanto a faixa de tensão do conversor A/D será de $\pm18,9V$.
+		Portanto a faixa de tensão do conversor A/D será de $\pm18,9V$ (37,8V).
 		
 \end{document}
